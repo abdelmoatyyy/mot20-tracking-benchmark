@@ -34,6 +34,8 @@ Tracker settings and any run-specific differences are recorded in the [configura
 
 ![IDF1 comparison](docs/benchmark/figures/idf1.png)
 
+![MOTA comparison](docs/benchmark/figures/mota.png)
+
 Tracking scores are percentages; higher HOTA, IDF1, MOTA, and FPS are better. Lower ID switches, latency, and GPU allocation are better. Values below are rounded from [comparison.csv](results/comparison.csv); full precision and additional columns remain in the source CSVs.
 
 | Detector | Tracker | HOTA ↑ | IDF1 ↑ | MOTA ↑ | ID switches ↓ | FPS ↑ | Mean latency (ms) ↓ | Peak GPU (MB) ↓ |
@@ -64,16 +66,16 @@ The detection table uses unit-scale values (0–1); the tracking table uses perc
 
 ![Tracking accuracy versus processing speed](docs/benchmark/figures/accuracy_vs_speed.png)
 
-The plot shows each measured detector and tracker combination. BoostTrack has the highest HOTA, while Deep-OC-SORT with YOLO26s has the highest recorded FPS. The [detailed benchmark report](docs/benchmark/tables.md) includes bar charts for MOTA, FPS, latency, GPU memory, ID switches, and fragmentations, plus per-sequence speed and exact detector-size changes.
+The plot shows each measured detector and tracker combination. BoostTrack has the highest HOTA, while Deep-OC-SORT with YOLO26s has the highest recorded FPS. The [detailed benchmark report](docs/benchmark/tables.md) includes bar charts for FPS, latency, GPU memory, ID switches, and fragmentations, plus per-sequence speed.
 
-| Tracker | YOLO26m HOTA gain | YOLO26m IDF1 gain | YOLO26m FPS change |
-| --- | ---: | ---: | ---: |
-| ByteTrack | +2.30 points | +4.80 points | -5.22 |
-| OC-SORT | +1.93 points | +4.04 points | -4.39 |
-| Deep-OC-SORT | +1.74 points | +3.77 points | -9.04 |
-| BoostTrack | +2.51 points | +4.14 points | -0.75 |
+| Tracker | ΔHOTA (pt) | ΔIDF1 (pt) | ΔMOTA (pt) | ΔFPS | ΔLatency (ms) | ΔGPU (MB) | ΔID switches | ΔFragmentations |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| ByteTrack | +2.30 | +4.80 | +5.00 | -5.22 | +31.77 | +154.94 | +318 | +755 |
+| OC-SORT | +1.93 | +4.04 | +3.93 | -4.39 | +23.55 | +154.94 | +324 | +1,403 |
+| Deep-OC-SORT | +1.74 | +3.77 | +3.47 | -9.04 | +39.94 | +170.10 | +312 | +2,032 |
+| BoostTrack | +2.51 | +4.14 | +4.58 | -0.75 | +26.73 | +67.79 | +76 | +69 |
 
-Each change compares YOLO26m with YOLO26s using the same tracker. Timing measurements came from separate runs, as described in [Setup](#setup).
+Each change is **YOLO26m minus YOLO26s** for the same tracker. Positive tracking score changes are improvements; positive latency, GPU, ID switch, and fragmentation changes are increases in cost or error. Timing measurements came from separate runs, as described in [Setup](#setup).
 
 ## Interpretation
 

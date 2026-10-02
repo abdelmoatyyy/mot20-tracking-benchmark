@@ -60,12 +60,12 @@ Each point is one measured detector and tracker combination. Moving upward impro
 
 Changes below use YOLO26s as the baseline for the **same tracker**. Positive HOTA and IDF1 changes indicate higher accuracy; negative FPS changes indicate reduced throughput.
 
-| Tracker | HOTA change (points) | IDF1 change (points) | MOTA change (points) | FPS change | Latency change (ms) | GPU change (MB) |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| ByteTrack | +2.30 | +4.80 | +5.00 | -5.22 | +31.77 | +154.94 |
-| OC-SORT | +1.93 | +4.04 | +3.93 | -4.39 | +23.55 | +154.94 |
-| Deep-OC-SORT | +1.74 | +3.77 | +3.47 | -9.04 | +39.94 | +170.10 |
-| BoostTrack | +2.51 | +4.14 | +4.58 | -0.75 | +26.73 | +67.79 |
+| Tracker | ΔHOTA (pt) | ΔIDF1 (pt) | ΔMOTA (pt) | ΔFPS | ΔLatency (ms) | ΔGPU (MB) | ΔID switches | ΔFragmentations |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| ByteTrack | +2.30 | +4.80 | +5.00 | -5.22 | +31.77 | +154.94 | +318 | +755 |
+| OC-SORT | +1.93 | +4.04 | +3.93 | -4.39 | +23.55 | +154.94 | +324 | +1,403 |
+| Deep-OC-SORT | +1.74 | +3.77 | +3.47 | -9.04 | +39.94 | +170.10 | +312 | +2,032 |
+| BoostTrack | +2.51 | +4.14 | +4.58 | -0.75 | +26.73 | +67.79 | +76 | +69 |
 
 ## Detector-only validation
 
