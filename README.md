@@ -30,7 +30,7 @@ Tracker settings and any run-specific differences are recorded in the [configura
 
 ## Results
 
-![HOTA comparison](docs/benchmark/figures/hota.png)
+![HOTA comparison](docs/benchmark/figures/hota (2).png)
 
 ![IDF1 comparison](docs/benchmark/figures/idf1.png)
 
