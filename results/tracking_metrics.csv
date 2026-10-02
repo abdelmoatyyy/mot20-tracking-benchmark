@@ -1,0 +1,3 @@
+Model,HOTA (%),DetA (%),AssA (%),MOTA (%),IDF1 (%),ID Switches,Frag,Tracker
+yolo26s,22.7,16.9,30.8,20.9,28.0,1500,3714,ByteTrack
+yolo26m,25.0,21.2,29.8,25.9,32.8,1818,4469,ByteTrack

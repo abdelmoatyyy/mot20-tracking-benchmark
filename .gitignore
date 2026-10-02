@@ -1,0 +1,11 @@
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+.env
+*.pt
+*.pth
+*.mp4
+MOT20/
+MOT20Labels/
+trackeval_gt/
+predictions/

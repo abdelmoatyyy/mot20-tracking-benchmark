@@ -1,0 +1,35 @@
+{
+  "ultralytics_version": "8.4.171",
+  "boxmot_version": "25.0.0",
+  "torch_version": "2.10.0+cu128",
+  "gpu": "Tesla T4",
+  "models": {
+    "yolo26s": "yolo26s.pt",
+    "yolo26m": "yolo26m.pt"
+  },
+  "tracker": "boosttrack",
+  "tracker_api": "legacy_reid_weights",
+  "tracker_config": {
+    "api": "legacy_reid_weights",
+    "constructor_parameters": {
+      "reid_weights": "/kaggle/working/mot20_boosttrack_benchmark/osnet_x0_25_msmt17.pt",
+      "device": "cuda:0",
+      "half": false,
+      "use_embeddings": true
+    },
+    "other_parameters": "Installed implementation defaults"
+  },
+  "reid_model": "/kaggle/working/mot20_boosttrack_benchmark/osnet_x0_25_msmt17.pt",
+  "reid_precision": "fp32",
+  "imgsz": 1280,
+  "conf": 0.1,
+  "iou": 0.7,
+  "max_det": 1000,
+  "detector_precision": 32,
+  "sequence_lengths": {
+    "MOT20-01": 429,
+    "MOT20-02": 2782,
+    "MOT20-03": 2405,
+    "MOT20-05": 3315
+  }
+}

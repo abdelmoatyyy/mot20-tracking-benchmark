@@ -1,0 +1,39 @@
+{
+  "ultralytics_version": "8.4.171",
+  "torch_version": "2.10.0+cu128",
+  "gpu": "Tesla T4",
+  "models": {
+    "yolo26s": "yolo26s.pt",
+    "yolo26m": "yolo26m.pt"
+  },
+  "tracker": "deepocsort",
+  "tracker_config": {
+    "tracker_type": "deepocsort",
+    "track_high_thresh": 0.3,
+    "track_low_thresh": 0.1,
+    "new_track_thresh": 0.3,
+    "track_buffer": 30,
+    "match_thresh": 0.8,
+    "fuse_score": true,
+    "delta_t": 3,
+    "inertia": 0.2,
+    "use_byte": false,
+    "gmc_method": "none",
+    "with_reid": true,
+    "model": "auto",
+    "proximity_thresh": 0.5,
+    "appearance_thresh": 0.9,
+    "alpha_fixed_emb": 0.95
+  },
+  "imgsz": 1280,
+  "conf": 0.1,
+  "iou": 0.7,
+  "max_det": 1000,
+  "precision": 32,
+  "sequence_lengths": {
+    "MOT20-01": 429,
+    "MOT20-02": 2782,
+    "MOT20-03": 2405,
+    "MOT20-05": 3315
+  }
+}

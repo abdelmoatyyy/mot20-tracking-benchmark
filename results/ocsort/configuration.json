@@ -1,0 +1,23 @@
+{
+  "ultralytics_version": "8.4.171",
+  "torch_version": "2.10.0+cu128",
+  "gpu": "Tesla T4",
+  "models": {
+    "yolo26s": "yolo26s.pt",
+    "yolo26m": "yolo26m.pt"
+  },
+  "trackers": [
+    "ocsort"
+  ],
+  "imgsz": 1280,
+  "conf": 0.1,
+  "iou": 0.7,
+  "max_det": 1000,
+  "precision": 32,
+  "sequence_lengths": {
+    "MOT20-01": 429,
+    "MOT20-02": 2782,
+    "MOT20-03": 2405,
+    "MOT20-05": 3315
+  }
+}
