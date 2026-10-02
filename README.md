@@ -8,6 +8,7 @@ Inspired by the clear experiment-and-results layout of [Person-ReID-BenchMark](h
 
 - [Setup](#setup)
 - [Results](#results)
+- [Detailed tables and graphs](docs/benchmark/tables.md)
 - [Interpretation](#interpretation)
 - [Repository layout](#repository-layout)
 - [Reproduce the experiments](#reproduce-the-experiments)
@@ -28,6 +29,10 @@ Tracker settings and any run-specific differences are recorded in the [configura
 
 ## Results
 
+![HOTA comparison](docs/benchmark/figures/hota.png)
+
+![IDF1 comparison](docs/benchmark/figures/idf1.png)
+
 Tracking scores are percentages; higher HOTA, IDF1, MOTA, and FPS are better. Lower ID switches, latency, and GPU allocation are better. Values below are rounded from [comparison.csv](results/comparison.csv); full precision and additional columns remain in the source CSVs.
 
 | Detector | Tracker | HOTA ↑ | IDF1 ↑ | MOTA ↑ | ID switches ↓ | FPS ↑ | Mean latency (ms) ↓ | Peak GPU (MB) ↓ |
@@ -45,12 +50,16 @@ Tracking scores are percentages; higher HOTA, IDF1, MOTA, and FPS are better. Lo
 
 **Detection-only results** from the ByteTrack notebook's validation stage:
 
+![Detector validation metrics](docs/benchmark/figures/detection.png)
+
 | Detector | Precision ↑ | Recall ↑ | mAP@50 ↑ | mAP@50:95 ↑ |
 | --- | ---: | ---: | ---: | ---: |
 | YOLO26s | 0.6040 | 0.6072 | 0.5165 | 0.2109 |
 | YOLO26m | **0.6246** | **0.6418** | **0.5461** | **0.2216** |
 
 The detection table uses unit-scale values (0–1); the tracking table uses percentages (0–100). Detection was evaluated once per detector, not once per tracker.
+
+For MOTA, throughput, GPU memory, and additional tables, see the [full benchmark report](docs/benchmark/tables.md).
 
 ## Interpretation
 
@@ -74,6 +83,11 @@ results/
   ocsort/                             # configuration, summaries, sequence detail
   deepocsort/                         # configuration, summaries, sequence detail
   boosttrack/                          # configuration, summaries, sequence detail
+docs/benchmark/
+  tables.md                            # detailed tables and charts
+  figures/                             # generated PNG bar charts
+scripts/
+  plot_comparison.py                   # regenerate all figures from the CSVs
 ```
 
 The notebooks are committed with cell outputs cleared to keep the repository manageable. Original ground-truth copies, prediction text files, videos, and checkpoint weights are omitted. Download MOT20 from its official source before rerunning.
@@ -84,6 +98,8 @@ The notebooks are committed with cell outputs cleared to keep the repository man
 2. Open [the ByteTrack notebook](notebooks/bytetrack.ipynb) in order for detector validation, ByteTrack tracking, timing, and TrackEval. Its setup cells install the needed dependencies and locate the dataset.
 3. Open [the other-trackers notebook](notebooks/ocsort_deepocsort_boosttrack.ipynb) for OC-SORT, Deep-OC-SORT, and BoostTrack. Run its sections in order; the notebook contains installation and TrackEval setup cells.
 4. Compare outputs with [comparison.csv](results/comparison.csv) and the tracker-specific summary and per-sequence CSVs under `results/`.
+
+To regenerate the report figures from the committed CSVs, install `matplotlib` and `numpy`, then run `python scripts/plot_comparison.py`.
 
 The notebooks were written for Kaggle and contain environment-specific paths such as `/kaggle/working`. They are experiment records, not a single command-line benchmark runner. The BoostTrack OSNet checkpoint is not included, so reproducing that run requires obtaining the same checkpoint. No BoT-SORT run is included.
 
