@@ -30,7 +30,7 @@ Tracker settings and any run-specific differences are recorded in the [configura
 
 ## Results
 
-![HOTA comparison](docs/benchmark/figures/hota (2).png)
+![HOTA comparison](docs/benchmark/figures/hota.png)
 
 ![IDF1 comparison](docs/benchmark/figures/idf1.png)
 
@@ -94,7 +94,7 @@ This profile uses a different evaluation setup from the validation table above (
 
 ![Tracking accuracy versus processing speed](docs/benchmark/figures/accuracy_vs_speed.png)
 
-The plot shows each detector and tracker combination with comparable end-to-end speed measurements, so BoT-SORT is not plotted. BoostTrack has the highest HOTA, while Deep-OC-SORT with YOLO26s has the highest recorded FPS. The [detailed benchmark report](docs/benchmark/tables.md) includes bar charts for FPS, latency, GPU memory, ID switches, and fragmentations, plus per-sequence speed.
+The plot shows measured HOTA and end-to-end FPS where both are available. BoT-SORT appears in the adjacent HOTA panel because its end-to-end FPS was not recorded. BoostTrack has the highest HOTA, while Deep-OC-SORT with YOLO26s has the highest recorded FPS. The [detailed benchmark report](docs/benchmark/tables.md) includes bar charts for FPS, latency, GPU memory, ID switches, and fragmentations, plus per-sequence speed.
 
 | Tracker | ΔHOTA (pt) | ΔIDF1 (pt) | ΔMOTA (pt) | ΔFPS | ΔLatency (ms) | ΔGPU (MB) | ΔID switches | ΔFragmentations |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |

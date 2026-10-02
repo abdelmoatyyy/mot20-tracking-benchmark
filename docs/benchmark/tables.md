@@ -1,6 +1,6 @@
 # MOT20 benchmark tables and graphs
 
-All tracking scores are percentages on the MOT20 training sequences. Timings and memory are from each run’s recorded summary. BoT-SORT has no supplied measurements. See the [main README](../../README.md) for setup and limitations.
+All tracking scores are percentages on the MOT20 training sequences. Timings and memory are from each run’s recorded summary. BoT-SORT has tracking scores but no end-to-end timing or memory measurements. See the [main README](../../README.md) for setup and limitations.
 
 ## Tracking accuracy
 
@@ -14,6 +14,8 @@ All tracking scores are percentages on the MOT20 training sequences. Timings and
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
 | yolo26s | ByteTrack | 22.70 | 28.00 | 20.90 | 1,500 | 3,714 |
 | yolo26m | ByteTrack | 25.00 | 32.80 | 25.90 | 1,818 | 4,469 |
+| yolo26s | BoT-SORT | 23.20 | 29.10 | 21.20 | 1,361 | 3,000 |
+| yolo26m | BoT-SORT | 26.00 | 34.40 | 26.40 | 1,596 | 3,571 |
 | yolo26s | OC-SORT | 19.97 | 23.46 | 16.82 | 1,840 | 10,652 |
 | yolo26m | OC-SORT | 21.90 | 27.50 | 20.75 | 2,164 | 12,055 |
 | yolo26s | Deep-OC-SORT | 18.73 | 21.36 | 14.76 | 2,024 | 12,327 |
@@ -54,7 +56,7 @@ The counts refer to the full four-sequence evaluation. The tracking accuracy tab
 
 ![HOTA versus FPS](figures/accuracy_vs_speed.png)
 
-Each point is one measured detector and tracker combination. Moving upward improves HOTA; moving right improves FPS. Timing reflects each run's own setup.
+Each point in the left panel has measured HOTA and end-to-end FPS. Moving upward improves HOTA; moving right improves FPS. The adjacent BoT-SORT panel shows its measured HOTA without inventing an FPS value. Timing reflects each run's own setup.
 
 ## YOLO26m versus YOLO26s
 
@@ -63,6 +65,7 @@ Changes below use YOLO26s as the baseline for the **same tracker**. Positive HOT
 | Tracker | ΔHOTA (pt) | ΔIDF1 (pt) | ΔMOTA (pt) | ΔFPS | ΔLatency (ms) | ΔGPU (MB) | ΔID switches | ΔFragmentations |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | ByteTrack | +2.30 | +4.80 | +5.00 | -5.22 | +31.77 | +154.94 | +318 | +755 |
+| BoT-SORT | +2.80 | +5.30 | +5.20 | n/r | n/r | n/r | +235 | +571 |
 | OC-SORT | +1.93 | +4.04 | +3.93 | -4.39 | +23.55 | +154.94 | +324 | +1,403 |
 | Deep-OC-SORT | +1.74 | +3.77 | +3.47 | -9.04 | +39.94 | +170.10 | +312 | +2,032 |
 | BoostTrack | +2.51 | +4.14 | +4.58 | -0.75 | +26.73 | +67.79 | +76 | +69 |
@@ -98,6 +101,7 @@ Raw per-sequence TrackEval CSVs for OC-SORT, Deep-OC-SORT, and BoostTrack are li
 ## Raw results
 
 - [Combined comparison](../../results/comparison.csv) · [ByteTrack tracking](../../results/tracking_metrics.csv) · [ByteTrack system](../../results/system_metrics.csv)
+- [BoT-SORT tracking](../../results/botsorttrack/model_metrics.csv) · [BoT-SORT per-sequence results](../../results/botsorttrack/per_sequence/)
 - [OC-SORT summaries](../../results/ocsort/) · [Deep-OC-SORT summaries](../../results/deepocsort/) · [BoostTrack summaries](../../results/boosttrack/)
 
 Regenerate charts with `python scripts/plot_comparison.py` from the repository root.
