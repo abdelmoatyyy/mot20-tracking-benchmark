@@ -57,7 +57,26 @@ grouped_chart('HOTA', 'Tracking accuracy · HOTA', 'HOTA (%) · higher is better
 grouped_chart('IDF1', 'Identity accuracy · IDF1', 'IDF1 (%) · higher is better', 'idf1.png')
 grouped_chart('MOTA', 'Tracking accuracy · MOTA', 'MOTA (%) · higher is better', 'mota.png')
 grouped_chart('FPS', 'Processing speed', 'Frames per second · higher is better', 'fps.png')
+grouped_chart('mean_latency_ms', 'Mean processing latency', 'Milliseconds · lower is better', 'latency.png', 0)
 grouped_chart('peak_GPU_allocated_MB', 'Peak GPU allocation', 'MB · lower is better', 'gpu_memory.png', 0)
+grouped_chart('ID_switches', 'Identity switches', 'Count · lower is better', 'id_switches.png', 0)
+grouped_chart('fragmentations', 'Track fragmentations', 'Count · lower is better', 'fragmentations.png', 0)
+
+fig, ax = plt.subplots(figsize=(9, 5.4), layout='constrained')
+for tracker in trackers:
+    for model in models:
+        run = by_key[(model, tracker)]
+        ax.scatter(float(run['FPS']), float(run['HOTA']), s=120, color=colors[model],
+                   marker={'ByteTrack': 'o', 'OC-SORT': 's', 'Deep-OC-SORT': '^', 'BoostTrack': 'D'}[tracker])
+        ax.annotate(f'{tracker} {model[-1]}', (float(run['FPS']), float(run['HOTA'])),
+                    xytext=(6, 5), textcoords='offset points', fontsize=8)
+ax.set_xlim(0, 24)
+ax.set_ylim(15, 35)
+ax.set_xlabel('Frames per second · higher is better')
+ax.set_ylabel('HOTA (%) · higher is better')
+ax.set_title('Tracking accuracy versus speed', loc='left', weight='bold', pad=14)
+fig.savefig(FIGURES / 'accuracy_vs_speed.png', dpi=180)
+plt.close(fig)
 
 fig, ax = plt.subplots(figsize=(7.5, 4.4), layout='constrained')
 metrics = [('precision', 'Precision'), ('recall', 'Recall'), ('map50', 'mAP@50'), ('map50_95', 'mAP@50:95')]
@@ -75,4 +94,4 @@ ax.legend(frameon=False, ncol=2)
 fig.savefig(FIGURES / 'detection.png', dpi=180)
 plt.close(fig)
 
-print(f'Wrote 6 figures to {FIGURES.relative_to(ROOT)}')
+print(f'Wrote 10 figures to {FIGURES.relative_to(ROOT)}')

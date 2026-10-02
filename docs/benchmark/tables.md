@@ -25,6 +25,8 @@ All tracking scores are percentages on the MOT20 training sequences. Timings and
 
 ![FPS](figures/fps.png)
 
+![Mean latency](figures/latency.png)
+
 ![Peak GPU allocation](figures/gpu_memory.png)
 
 | Detector | Tracker | FPS ↑ | Mean latency (ms) ↓ | Peak GPU allocated (MB) ↓ |
@@ -39,6 +41,31 @@ All tracking scores are percentages on the MOT20 training sequences. Timings and
 | yolo26m | BoostTrack | 4.92 | 203.09 | 442.81 |
 
 FPS is the value recorded by each run. BoostTrack labels its column `steady_state_FPS`; the other tracker summaries use `FPS`. GPU memory is allocated memory, not total device usage.
+
+## Identity stability
+
+![ID switches](figures/id_switches.png)
+
+![Track fragmentations](figures/fragmentations.png)
+
+The counts refer to the full four-sequence evaluation. The tracking accuracy table above gives their exact values. A lower count does not by itself imply a higher HOTA or IDF1 score.
+
+## Accuracy versus speed
+
+![HOTA versus FPS](figures/accuracy_vs_speed.png)
+
+Each point is one measured detector and tracker combination. Moving upward improves HOTA; moving right improves FPS. Timing reflects each run's own setup.
+
+## YOLO26m versus YOLO26s
+
+Changes below use YOLO26s as the baseline for the **same tracker**. Positive HOTA and IDF1 changes indicate higher accuracy; negative FPS changes indicate reduced throughput.
+
+| Tracker | HOTA change (points) | IDF1 change (points) | MOTA change (points) | FPS change | Latency change (ms) | GPU change (MB) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| ByteTrack | +2.30 | +4.80 | +5.00 | -5.22 | +31.77 | +154.94 |
+| OC-SORT | +1.93 | +4.04 | +3.93 | -4.39 | +23.55 | +154.94 |
+| Deep-OC-SORT | +1.74 | +3.77 | +3.47 | -9.04 | +39.94 | +170.10 |
+| BoostTrack | +2.51 | +4.14 | +4.58 | -0.75 | +26.73 | +67.79 |
 
 ## Detector-only validation
 

@@ -8,6 +8,7 @@ Inspired by the clear experiment-and-results layout of [Person-ReID-BenchMark](h
 
 - [Setup](#setup)
 - [Results](#results)
+- [Performance comparisons](#performance-comparisons)
 - [Detailed tables and graphs](docs/benchmark/tables.md)
 - [Interpretation](#interpretation)
 - [Repository layout](#repository-layout)
@@ -59,7 +60,20 @@ Tracking scores are percentages; higher HOTA, IDF1, MOTA, and FPS are better. Lo
 
 The detection table uses unit-scale values (0–1); the tracking table uses percentages (0–100). Detection was evaluated once per detector, not once per tracker.
 
-For MOTA, throughput, GPU memory, and additional tables, see the [full benchmark report](docs/benchmark/tables.md).
+## Performance comparisons
+
+![Tracking accuracy versus processing speed](docs/benchmark/figures/accuracy_vs_speed.png)
+
+The plot shows each measured detector and tracker combination. BoostTrack has the highest HOTA, while Deep-OC-SORT with YOLO26s has the highest recorded FPS. The [detailed benchmark report](docs/benchmark/tables.md) includes bar charts for MOTA, FPS, latency, GPU memory, ID switches, and fragmentations, plus per-sequence speed and exact detector-size changes.
+
+| Tracker | YOLO26m HOTA gain | YOLO26m IDF1 gain | YOLO26m FPS change |
+| --- | ---: | ---: | ---: |
+| ByteTrack | +2.30 points | +4.80 points | -5.22 |
+| OC-SORT | +1.93 points | +4.04 points | -4.39 |
+| Deep-OC-SORT | +1.74 points | +3.77 points | -9.04 |
+| BoostTrack | +2.51 points | +4.14 points | -0.75 |
+
+Each change compares YOLO26m with YOLO26s using the same tracker. Timing measurements came from separate runs, as described in [Setup](#setup).
 
 ## Interpretation
 
