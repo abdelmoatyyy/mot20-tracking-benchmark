@@ -30,9 +30,15 @@ Tracker settings and any run-specific differences are recorded in the [configura
 
 ## Results
 
-![HOTA comparison](docs/benchmark/figures/hota (2).png)
+**HOTA by tracker: YOLO26s vs YOLO26m**
+
+![HOTA comparison](docs/benchmark/figures/hota%20%282%29.png)
+
+**IDF1 by tracker: YOLO26s vs YOLO26m**
 
 ![IDF1 comparison](docs/benchmark/figures/idf1.png)
+
+**MOTA by tracker: YOLO26s vs YOLO26m**
 
 ![MOTA comparison](docs/benchmark/figures/mota.png)
 
@@ -77,6 +83,8 @@ MOT20-05 is the hardest sequence for both detectors, and it is where YOLO26m gai
 
 **Detection-only results** from the ByteTrack notebook's validation stage:
 
+**Detector validation metrics: YOLO26s vs YOLO26m**
+
 ![Detector validation metrics](docs/benchmark/figures/detection.png)
 
 | Detector | Precision ↑ | Recall ↑ | mAP@50 ↑ | mAP@50:95 ↑ |
@@ -97,15 +105,25 @@ This profile uses a different evaluation setup from the validation table above (
 
 ## Performance comparisons
 
+**Tracking accuracy (HOTA) versus processing speed (FPS)**
+
 ![Tracking accuracy versus processing speed](docs/benchmark/figures/accuracy_vs_speed1.png)
 
 The plot shows each measured detector and tracker combination. BoostTrack has the highest HOTA, while Deep-OC-SORT with YOLO26s has the highest recorded FPS. The [detailed benchmark report](docs/benchmark/tables.md) includes bar charts for FPS, latency, GPU memory, ID switches, and fragmentations, plus per-sequence speed.
 
+**Processing speed (FPS) by tracker**
+
 ![FPS comparison](docs/benchmark/figures/fps1.png)
+
+**Mean latency (ms) by tracker**
 
 ![Mean latency comparison](docs/benchmark/figures/latency1.png)
 
+**Peak GPU memory (MB) by tracker**
+
 ![Peak GPU memory comparison](docs/benchmark/figures/gpu_memory1.png)
+
+**ID switches by tracker**
 
 ![ID switches comparison](docs/benchmark/figures/id_switches1.png)
 
