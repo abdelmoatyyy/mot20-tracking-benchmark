@@ -26,7 +26,7 @@ Inspired by the clear experiment-and-results layout of [Person-ReID-BenchMark](h
 | Evaluation | TrackEval for tracking; Ultralytics validation for ByteTrack notebook detector metrics |
 | Software | Ultralytics 8.4.171 and PyTorch 2.10.0+cu128 recorded for OC-SORT, Deep-OC-SORT, and BoostTrack; BoxMOT 25.0.0 recorded for BoostTrack |
 
-Tracker settings and any run-specific differences are recorded in the [configuration files](results/). ByteTrack uses Ultralytics `bytetrack.yaml`; OC-SORT and Deep-OC-SORT use the supplied YAML files. BoostTrack uses an OSNet ReID model and the installed implementation defaults recorded in its configuration. BoT-SORT tracking scores come from its own TrackEval summaries; its environment details were not recorded in the supplied artifacts. These runs were performed separately, so timing comparisons should be treated as indicative rather than a controlled simultaneous benchmark.
+Tracker settings and any run-specific differences are recorded in the [configuration files](results/). ByteTrack uses Ultralytics `bytetrack.yaml`; OC-SORT and Deep-OC-SORT use the supplied YAML files. BoostTrack uses an OSNet ReID model and the installed implementation defaults recorded in its configuration. BoT-SORT scores and timing come from its own run summaries; its environment details were not recorded in the supplied artifacts. These runs were performed separately, so timing comparisons should be treated as indicative rather than a controlled simultaneous benchmark.
 
 ## Results
 
@@ -42,8 +42,8 @@ Tracking scores are percentages; higher HOTA, IDF1, MOTA, and FPS are better. Lo
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | YOLO26s | ByteTrack | 22.70 | 28.00 | 20.90 | 1,500 | 15.57 | 64.99 | 196.78 |
 | YOLO26m | ByteTrack | 25.00 | 32.80 | 25.90 | 1,818 | 10.35 | 96.76 | 351.73 |
-| YOLO26s | BoT-SORT | 23.20 | 29.10 | 21.20 | **1,361** | n/r | n/r | n/r |
-| YOLO26m | BoT-SORT | 26.00 | 34.40 | 26.40 | **1,596** | n/r | n/r | n/r |
+| YOLO26s | BoT-SORT | 23.20 | 29.10 | 21.20 | **1,361** | 16.00 | 62.60 | 212.20 |
+| YOLO26m | BoT-SORT | 26.00 | 34.40 | 26.40 | **1,596** | 10.20 | 97.70 | 435.00 |
 | YOLO26s | OC-SORT | 19.97 | 23.46 | 16.82 | 1,840 | 16.02 | 62.41 | 196.03 |
 | YOLO26m | OC-SORT | 21.90 | 27.50 | 20.75 | 2,164 | 11.63 | 85.96 | 350.98 |
 | YOLO26s | Deep-OC-SORT | 18.73 | 21.36 | 14.76 | 2,024 | 20.22 | 49.45 | 213.34 |
@@ -51,7 +51,12 @@ Tracking scores are percentages; higher HOTA, IDF1, MOTA, and FPS are better. Lo
 | YOLO26s | BoostTrack | 27.21 | 37.03 | 28.13 | 2,471 | 5.67 | 176.36 | 375.02 |
 | YOLO26m | BoostTrack | **29.72** | **41.17** | **32.71** | 2,547 | 4.92 | 203.09 | 442.81 |
 
-**n/r** = not reported. The BoT-SORT timing and memory figures in the supplied artifacts come from a separate detector-only GPU profile (see below), not from an end-to-end tracking run, so they are not comparable with the other FPS, latency, and GPU columns.
+**BoT-SORT combined metrics** (TrackEval, all four sequences):
+
+| Detector | HOTA ↑ | MOTA ↑ | IDF1 ↑ | DetA ↑ | AssA ↑ | ID switches ↓ | Frag ↓ | FPS ↑ | Mean latency (ms) ↓ | Peak GPU (MB) ↓ |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| YOLO26s | 23.2 | 21.2 | 29.1 | 17.0 | 32.0 | 1,361 | 3,000 | 16.0 | 62.6 | 212.2 |
+| YOLO26m | 26.0 | 26.4 | 34.4 | 21.5 | 31.7 | 1,596 | 3,571 | 10.2 | 97.7 | 435.0 |
 
 **BoT-SORT per-sequence results** (HOTA / MOTA / IDF1 in %, from TrackEval):
 
@@ -88,18 +93,26 @@ The detection table uses unit-scale values (0–1); the tracking table uses perc
 | YOLO26s | 10.01 | 37.00 | 27.02 | 0.8492 | 0.3835 | 0.3468 | 0.1532 | 2.20 |
 | YOLO26m | 21.90 | 103.71 | 9.64 | 0.8249 | 0.4517 | 0.4038 | 0.1749 | 4.15 |
 
-This profile uses a different evaluation setup from the validation table above (precision and recall differ noticeably), so the two should not be mixed. Its timing and memory figures describe the detector alone and are not directly comparable with the tracker FPS, latency, and GPU columns in the main table.
+This profile uses a different evaluation setup from the validation table above (precision and recall differ noticeably), and its timing and memory describe the detector alone, so it should not be compared with the end-to-end tracker columns in the main table.
 
 ## Performance comparisons
 
 ![Tracking accuracy versus processing speed](docs/benchmark/figures/accuracy_vs_speed.png)
 
-The plot shows each detector and tracker combination with comparable end-to-end speed measurements, so BoT-SORT is not plotted. BoostTrack has the highest HOTA, while Deep-OC-SORT with YOLO26s has the highest recorded FPS. The [detailed benchmark report](docs/benchmark/tables.md) includes bar charts for FPS, latency, GPU memory, ID switches, and fragmentations, plus per-sequence speed.
+The plot shows each measured detector and tracker combination. BoostTrack has the highest HOTA, while Deep-OC-SORT with YOLO26s has the highest recorded FPS. The [detailed benchmark report](docs/benchmark/tables.md) includes bar charts for FPS, latency, GPU memory, ID switches, and fragmentations, plus per-sequence speed.
+
+![FPS comparison](docs/benchmark/figures/fps.png)
+
+![Mean latency comparison](docs/benchmark/figures/latency.png)
+
+![Peak GPU memory comparison](docs/benchmark/figures/gpu_memory.png)
+
+![ID switches comparison](docs/benchmark/figures/id_switches.png)
 
 | Tracker | ΔHOTA (pt) | ΔIDF1 (pt) | ΔMOTA (pt) | ΔFPS | ΔLatency (ms) | ΔGPU (MB) | ΔID switches | ΔFragmentations |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | ByteTrack | +2.30 | +4.80 | +5.00 | -5.22 | +31.77 | +154.94 | +318 | +755 |
-| BoT-SORT | +2.80 | +5.30 | +5.20 | n/r | n/r | n/r | +235 | +571 |
+| BoT-SORT | +2.80 | +5.30 | +5.20 | -5.80 | +35.10 | +222.80 | +235 | +571 |
 | OC-SORT | +1.93 | +4.04 | +3.93 | -4.39 | +23.55 | +154.94 | +324 | +1,403 |
 | Deep-OC-SORT | +1.74 | +3.77 | +3.47 | -9.04 | +39.94 | +170.10 | +312 | +2,032 |
 | BoostTrack | +2.51 | +4.14 | +4.58 | -0.75 | +26.73 | +67.79 | +76 | +69 |
@@ -109,11 +122,12 @@ Each change is **YOLO26m minus YOLO26s** for the same tracker. Positive tracking
 ## Interpretation
 
 - **Highest tracking accuracy:** YOLO26m + BoostTrack leads the recorded runs in HOTA (29.72), IDF1 (41.17), and MOTA (32.71), with 4.92 FPS.
-- **Second-best accuracy:** YOLO26m + BoT-SORT is next (HOTA 26.00, IDF1 34.40, MOTA 26.40), ahead of ByteTrack, OC-SORT, and Deep-OC-SORT with the same detector. With YOLO26s, BoT-SORT (HOTA 23.20) also edges out ByteTrack (22.70).
+- **Best accuracy at practical speed:** YOLO26m + BoT-SORT is second in accuracy (HOTA 26.00, IDF1 34.40, MOTA 26.40) and runs at 10.2 FPS, about twice the speed of YOLO26m + BoostTrack. With YOLO26s, BoT-SORT (HOTA 23.20, 16.0 FPS) edges out ByteTrack (HOTA 22.70, 15.57 FPS).
+- **Speed among YOLO26s runs:** Deep-OC-SORT records the highest speed at 20.22 FPS, but with the lowest HOTA (18.73). OC-SORT (16.02 FPS), BoT-SORT (16.00 FPS), and ByteTrack (15.57 FPS) are close to each other, and BoT-SORT has the best HOTA of the three.
 - **Identity switches:** BoT-SORT has the lowest count for each detector (1,361 with YOLO26s, 1,596 with YOLO26m), followed by ByteTrack. Switch counts alone do not determine HOTA or IDF1: BoostTrack has the most switches among the compared runs yet the highest HOTA and IDF1.
-- **Speed among YOLO26s runs with end-to-end timing:** Deep-OC-SORT records 20.22 FPS, with HOTA 18.73. ByteTrack records 15.57 FPS and HOTA 22.70. BoT-SORT end-to-end speed is not reported.
-- **Detector size:** YOLO26m improves HOTA for every evaluated tracker (+1.74 to +2.80 points). Where timing is available, it also lowers FPS in each corresponding run.
+- **Detector size:** YOLO26m improves HOTA for every evaluated tracker (+1.74 to +2.80 points), at the cost of lower FPS and higher latency and GPU memory in each corresponding run. BoT-SORT gains the most HOTA from the larger detector, and BoostTrack pays the smallest speed cost.
 - **Association versus detection:** For BoT-SORT, YOLO26m's gain comes mostly from detection quality (DetA 17.0 → 21.5) rather than association (AssA 32.0 → 31.7).
+- **GPU memory:** BoT-SORT uses more GPU memory than ByteTrack and OC-SORT with YOLO26m (435.0 MB versus 351.73 and 350.98 MB), similar to BoostTrack (442.81 MB), but with much higher throughput.
 
 ## Repository layout
 
@@ -122,7 +136,7 @@ notebooks/
   bytetrack.ipynb                     # detection, ByteTrack, TrackEval, profiling, visuals
   ocsort_deepocsort_boosttrack.ipynb  # three tracker runs and evaluation
 results/
-  comparison.csv                      # measured detector/tracker combinations
+  comparison.csv                      # all measured detector/tracker combinations
   detection_metrics.csv               # detector-only validation
   tracking_metrics.csv                # ByteTrack tracking metrics
   system_metrics.csv                  # ByteTrack timing and memory
@@ -149,7 +163,7 @@ The notebooks are committed with cell outputs cleared to keep the repository man
 1. Obtain the MOT20 training images and labels from the [MOTChallenge dataset page](https://motchallenge.net/data/MOT20/), accepting its terms. The notebooks expect the Kaggle layout under `/kaggle/input`; adjust the path discovery cells if running elsewhere.
 2. Open [the ByteTrack notebook](notebooks/bytetrack.ipynb) in order for detector validation, ByteTrack tracking, timing, and TrackEval. Its setup cells install the needed dependencies and locate the dataset.
 3. Open [the other-trackers notebook](notebooks/ocsort_deepocsort_boosttrack.ipynb) for OC-SORT, Deep-OC-SORT, and BoostTrack. Run its sections in order; the notebook contains installation and TrackEval setup cells.
-4. Compare outputs with [comparison.csv](results/comparison.csv) and the tracker-specific summary and per-sequence CSVs under `results/`. BoT-SORT's TrackEval summaries are in `results/botsort/`.
+4. Compare outputs with [comparison.csv](results/comparison.csv) and the tracker-specific summary and per-sequence CSVs under `results/`. BoT-SORT's summaries are in `results/botsort/`.
 
 To regenerate the report figures from the committed CSVs, install `matplotlib` and `numpy`, then run `python scripts/plot_comparison.py`.
 
@@ -157,7 +171,7 @@ The notebooks were written for Kaggle and contain environment-specific paths suc
 
 ## Scope and limitations
 
-These are results on the **MOT20 training split**, not MOT20 test leaderboard scores. The detectors use pretrained weights without MOT20 fine-tuning. Scores reflect the recorded single runs and tracker configurations, and some tracker implementations and ReID settings differ. FPS is taken from each run's own summary, so compare speed with that context. BoT-SORT has tracking-accuracy results only: no end-to-end FPS, latency, or GPU figures were recorded for it, and its detector-only profile should not be compared with the other trackers' timing. `R@1` and `R@5` fields in some raw summaries are blank and are not reported here.
+These are results on the **MOT20 training split**, not MOT20 test leaderboard scores. The detectors use pretrained weights without MOT20 fine-tuning. Scores reflect the recorded single runs and tracker configurations, and some tracker implementations and ReID settings differ. FPS is taken from each run's own summary, so compare speed with that context. BoT-SORT's environment and configuration were not recorded in the supplied artifacts, so its timing is the least documented of the five trackers. `R@1` and `R@5` fields in some raw summaries are blank and are not reported here.
 
 ## Acknowledgments
 
