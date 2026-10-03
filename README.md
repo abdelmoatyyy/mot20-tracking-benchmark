@@ -32,7 +32,7 @@ Tracker settings and any run-specific differences are recorded in the [configura
 
 **HOTA by tracker: YOLO26s vs YOLO26m**
 
-![HOTA comparison](docs/benchmark/figures/hota%20%282%29.png)
+![HOTA comparison](docs/benchmark/figures/hota.png)
 
 **IDF1 by tracker: YOLO26s vs YOLO26m**
 
