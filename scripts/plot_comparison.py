@@ -18,8 +18,11 @@ with (RESULTS / 'comparison.csv').open(newline='') as handle:
     runs = list(csv.DictReader(handle))
 with (RESULTS / 'detection_metrics.csv').open(newline='') as handle:
     detection = {row['']: row for row in csv.DictReader(handle)}
+with (RESULTS / 'botsorttrack' / 'model_metrics.csv').open(newline='') as handle:
+    botsort = {row['Model']: row for row in csv.DictReader(handle)}
 
 trackers = ['ByteTrack', 'OC-SORT', 'Deep-OC-SORT', 'BoostTrack']
+accuracy_trackers = ['ByteTrack', 'BoT-SORT', 'OC-SORT', 'Deep-OC-SORT', 'BoostTrack']
 models = ['yolo26s', 'yolo26m']
 colors = {'yolo26s': '#3478C0', 'yolo26m': '#E38435'}
 by_key = {(row['detector'], row['tracker']): row for row in runs}
@@ -36,15 +39,23 @@ plt.rcParams.update({
 })
 
 
-def grouped_chart(field: str, title: str, ylabel: str, filename: str, digits: int = 1) -> None:
+def grouped_chart(field: str, title: str, ylabel: str, filename: str,
+                  digits: int = 1, include_botsort: bool = False) -> None:
     fig, ax = plt.subplots(figsize=(9.4, 4.8), layout='constrained')
-    x = np.arange(len(trackers))
+    labels = accuracy_trackers if include_botsort else trackers
+    x = np.arange(len(labels))
     width = 0.35
     for offset, model in [(-width / 2, 'yolo26s'), (width / 2, 'yolo26m')]:
-        values = [float(by_key[(model, tracker)][field]) for tracker in trackers]
+        values = [
+            float(botsort[model][{
+                'HOTA': 'HOTA (%)', 'IDF1': 'IDF1 (%)', 'MOTA': 'MOTA (%)',
+                'ID_switches': 'ID Switches', 'fragmentations': 'Frag',
+            }[field]]) if tracker == 'BoT-SORT' else float(by_key[(model, tracker)][field])
+            for tracker in labels
+        ]
         bars = ax.bar(x + offset, values, width, label=model.upper(), color=colors[model])
         ax.bar_label(bars, labels=[f'{value:.{digits}f}' for value in values], padding=3, fontsize=9)
-    ax.set_xticks(x, trackers)
+    ax.set_xticks(x, labels)
     ax.set_title(title, loc='left', weight='bold', pad=14)
     ax.set_ylabel(ylabel)
     ax.set_ylim(0, ax.get_ylim()[1] * 1.15)
@@ -53,16 +64,19 @@ def grouped_chart(field: str, title: str, ylabel: str, filename: str, digits: in
     plt.close(fig)
 
 
-grouped_chart('HOTA', 'Tracking accuracy · HOTA', 'HOTA (%) · higher is better', 'hota.png')
-grouped_chart('IDF1', 'Identity accuracy · IDF1', 'IDF1 (%) · higher is better', 'idf1.png')
-grouped_chart('MOTA', 'Tracking accuracy · MOTA', 'MOTA (%) · higher is better', 'mota.png')
+grouped_chart('HOTA', 'Tracking accuracy · HOTA', 'HOTA (%) · higher is better', 'hota.png', include_botsort=True)
+grouped_chart('IDF1', 'Identity accuracy · IDF1', 'IDF1 (%) · higher is better', 'idf1.png', include_botsort=True)
+grouped_chart('MOTA', 'Tracking accuracy · MOTA', 'MOTA (%) · higher is better', 'mota.png', include_botsort=True)
 grouped_chart('FPS', 'Processing speed', 'Frames per second · higher is better', 'fps.png')
 grouped_chart('mean_latency_ms', 'Mean processing latency', 'Milliseconds · lower is better', 'latency.png', 0)
 grouped_chart('peak_GPU_allocated_MB', 'Peak GPU allocation', 'MB · lower is better', 'gpu_memory.png', 0)
-grouped_chart('ID_switches', 'Identity switches', 'Count · lower is better', 'id_switches.png', 0)
-grouped_chart('fragmentations', 'Track fragmentations', 'Count · lower is better', 'fragmentations.png', 0)
+grouped_chart('ID_switches', 'Identity switches', 'Count · lower is better', 'id_switches.png', 0, include_botsort=True)
+grouped_chart('fragmentations', 'Track fragmentations', 'Count · lower is better', 'fragmentations.png', 0, include_botsort=True)
 
-fig, ax = plt.subplots(figsize=(9, 5.4), layout='constrained')
+fig, (ax, missing_ax) = plt.subplots(
+    1, 2, figsize=(11.5, 5.4), layout='constrained',
+    gridspec_kw={'width_ratios': [3.4, 1.4]},
+)
 for tracker in trackers:
     for model in models:
         run = by_key[(model, tracker)]
@@ -75,6 +89,17 @@ ax.set_ylim(15, 35)
 ax.set_xlabel('Frames per second · higher is better')
 ax.set_ylabel('HOTA (%) · higher is better')
 ax.set_title('Tracking accuracy versus speed', loc='left', weight='bold', pad=14)
+missing_ax.set_title('BoT-SORT', loc='left', weight='bold', pad=14)
+for y, model in enumerate(models):
+    value = float(botsort[model]['HOTA (%)'])
+    missing_ax.barh(y, value, height=0.46, color=colors[model])
+    missing_ax.text(value + 0.4, y, f'{value:.1f}%', va='center', fontsize=9)
+missing_ax.set_yticks(range(len(models)), ['YOLO26s', 'YOLO26m'])
+missing_ax.invert_yaxis()
+missing_ax.set_xlim(0, 34)
+missing_ax.set_xlabel('HOTA (%)')
+missing_ax.text(0.5, -0.2, 'End-to-end FPS not reported', transform=missing_ax.transAxes,
+                ha='center', va='top', fontsize=9)
 fig.savefig(FIGURES / 'accuracy_vs_speed.png', dpi=180)
 plt.close(fig)
 

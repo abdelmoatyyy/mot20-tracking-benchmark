@@ -29,6 +29,7 @@ Inspired by the clear experiment-and-results layout of [Person-ReID-BenchMark](h
 
 Tracker settings and any run-specific differences are recorded in the [configuration files](results/). ByteTrack uses Ultralytics `bytetrack.yaml`; OC-SORT and Deep-OC-SORT use the supplied YAML files. BoostTrack uses an OSNet ReID model and the installed implementation defaults recorded in its configuration. BoT-SORT scores and timing come from its own run summaries; its environment details were not recorded in the supplied artifacts. These runs were performed separately, so timing comparisons should be treated as indicative rather than a controlled simultaneous benchmark.
 
+
 ## Detector selection
 
 YOLO26s and YOLO26m were chosen after a separate detector comparison on **CrowdHuman**, a dense-crowd pedestrian dataset. Fifteen detectors were evaluated: the YOLOv8, YOLO11, YOLO12, and YOLO26 families in n, s, m (and YOLO12l) sizes, plus RT-DETR-l and RT-DETR-x. All 15 runs completed successfully. Full results are in [crowdhuman_detector_comparison.csv](results/crowdhuman_detector_comparison.csv).
@@ -67,6 +68,8 @@ Why these two:
 - **Not the best on every metric:** YOLOv8m has slightly higher mAP@50 (0.4447) and FPS (53.62), and YOLO12l has the highest mAP@50:95. The choice reflects the accuracy-speed-memory trade-off rather than a single leading score. RT-DETR models were the slowest and most memory-hungry without an accuracy gain.
 
 These CrowdHuman figures come from a detector-only run with its own settings, so the FPS and memory values are not comparable with the end-to-end tracking FPS and GPU figures in the tables below. The image size, split, and hardware for this run were not recorded in the supplied artifact.
+=======
+
 
 ## Results
 
@@ -212,8 +215,12 @@ docs/benchmark/
   tables.md                           # detailed tables and charts
   figures/                            # generated PNG bar charts
 scripts/
+
   plot_comparison.py                  # regenerate tracking figures
   plot_crowdhuman.py                  # regenerate detector-selection figures
+=======
+  plot_comparison.py                  # regenerate all figures from the CSVs
+
 ```
 
 The notebooks are committed with cell outputs cleared to keep the repository manageable. Original ground-truth copies, prediction text files, videos, and checkpoint weights are omitted. Download MOT20 from its official source before rerunning.
@@ -231,8 +238,16 @@ The notebooks were written for Kaggle and contain environment-specific paths suc
 
 ## Scope and limitations
 
+
 These are results on the **MOT20 training split**, not MOT20 test leaderboard scores. The detectors use pretrained weights without MOT20 fine-tuning. Scores reflect the recorded single runs and tracker configurations, and some tracker implementations and ReID settings differ. FPS is taken from each run's own summary, so compare speed with that context. BoT-SORT's environment and configuration were not recorded in the supplied artifacts, so its timing is the least documented of the five trackers. The detector-selection comparison was run on CrowdHuman, not MOT20, and its settings were not recorded. `R@1` and `R@5` fields in some raw summaries are blank and are not reported here.
 
 ## Acknowledgments
 
 [MOTChallenge / MOT20](https://motchallenge.net/data/MOT20/), [CrowdHuman](https://www.crowdhuman.org/), [Ultralytics](https://github.com/ultralytics/ultralytics), [TrackEval](https://github.com/JonathonLuiten/TrackEval), and [BoxMOT](https://github.com/mikel-brostrom/boxmot).
+=======
+These are results on the **MOT20 training split**, not MOT20 test leaderboard scores. The detectors use pretrained weights without MOT20 fine-tuning. Scores reflect the recorded single runs and tracker configurations, and some tracker implementations and ReID settings differ. FPS is taken from each run's own summary, so compare speed with that context. BoT-SORT's environment and configuration were not recorded in the supplied artifacts, so its timing is the least documented of the five trackers. `R@1` and `R@5` fields in some raw summaries are blank and are not reported here.
+
+## Acknowledgments
+
+[MOTChallenge / MOT20](https://motchallenge.net/data/MOT20/), [Ultralytics](https://github.com/ultralytics/ultralytics), [TrackEval](https://github.com/JonathonLuiten/TrackEval), and [BoxMOT](https://github.com/mikel-brostrom/boxmot).
+
