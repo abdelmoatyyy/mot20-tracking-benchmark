@@ -7,6 +7,7 @@ Inspired by the clear experiment-and-results layout of [Person-ReID-BenchMark](h
 ## Contents
 
 - [Setup](#setup)
+- [Detector selection](#detector-selection)
 - [Results](#results)
 - [Performance comparisons](#performance-comparisons)
 - [Detailed tables and graphs](docs/benchmark/tables.md)
@@ -27,6 +28,48 @@ Inspired by the clear experiment-and-results layout of [Person-ReID-BenchMark](h
 | Software | Ultralytics 8.4.171 and PyTorch 2.10.0+cu128 recorded for OC-SORT, Deep-OC-SORT, and BoostTrack; BoxMOT 25.0.0 recorded for BoostTrack |
 
 Tracker settings and any run-specific differences are recorded in the [configuration files](results/). ByteTrack uses Ultralytics `bytetrack.yaml`; OC-SORT and Deep-OC-SORT use the supplied YAML files. BoostTrack uses an OSNet ReID model and the installed implementation defaults recorded in its configuration. BoT-SORT scores and timing come from its own run summaries; its environment details were not recorded in the supplied artifacts. These runs were performed separately, so timing comparisons should be treated as indicative rather than a controlled simultaneous benchmark.
+
+
+## Detector selection
+
+YOLO26s and YOLO26m were chosen after a separate detector comparison on **CrowdHuman**, a dense-crowd pedestrian dataset. Fifteen detectors were evaluated: the YOLOv8, YOLO11, YOLO12, and YOLO26 families in n, s, m (and YOLO12l) sizes, plus RT-DETR-l and RT-DETR-x. All 15 runs completed successfully. Full results are in [crowdhuman_detector_comparison.csv](results/crowdhuman_detector_comparison.csv).
+
+**Detector accuracy ranking (mAP@50:95 on CrowdHuman)**
+
+![CrowdHuman detector ranking](docs/benchmark/figures/crowdhuman_map.png)
+
+**Detector accuracy versus speed (mAP@50:95 against GPU FPS)**
+
+![CrowdHuman accuracy versus speed](docs/benchmark/figures/crowdhuman_map_vs_speed.png)
+
+| Detector | Params (M) | Precision ↑ | Recall ↑ | mAP@50 ↑ | mAP@50:95 ↑ | GPU inference (ms) ↓ | GPU FPS ↑ | Peak GPU (GB) ↓ |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| YOLO12l | 26.45 | 0.6083 | 0.4555 | 0.4445 | 0.1992 | 33.75 | 29.63 | 1.03 |
+| **YOLO26m** | 21.90 | 0.5995 | 0.4567 | 0.4426 | 0.1990 | 19.90 | 50.25 | 0.88 |
+| YOLO12m | 20.20 | 0.6113 | 0.4498 | 0.4421 | 0.1981 | 23.42 | 42.70 | 0.87 |
+| YOLOv8m | 25.90 | 0.6085 | 0.4585 | 0.4447 | 0.1974 | 18.65 | 53.62 | 0.75 |
+| YOLO11m | 20.11 | 0.6017 | 0.4493 | 0.4360 | 0.1962 | 19.95 | 50.13 | 0.87 |
+| YOLO12s | 9.29 | 0.6094 | 0.4326 | 0.4331 | 0.1925 | 8.56 | 116.81 | 0.47 |
+| RT-DETR-x | 67.47 | 0.5852 | 0.4469 | 0.4294 | 0.1911 | 72.70 | 13.76 | 1.88 |
+| **YOLO26s** | 10.01 | 0.6008 | 0.4344 | 0.4296 | 0.1908 | 6.36 | 157.16 | 0.47 |
+| YOLO11s | 9.46 | 0.5966 | 0.4349 | 0.4307 | 0.1895 | 6.58 | 151.99 | 0.47 |
+| RT-DETR-l | 32.97 | 0.5884 | 0.4456 | 0.4246 | 0.1890 | 41.20 | 24.27 | 1.23 |
+| YOLOv8s | 11.17 | 0.6070 | 0.4356 | 0.4289 | 0.1867 | 6.96 | 143.74 | 0.42 |
+| YOLO12n | 2.60 | 0.5963 | 0.4023 | 0.4116 | 0.1795 | 4.60 | 217.22 | 0.26 |
+| YOLOv8n | 3.16 | 0.5979 | 0.4074 | 0.4152 | 0.1787 | 3.98 | 251.45 | 0.24 |
+| YOLO26n | 2.57 | 0.5915 | 0.3982 | 0.4093 | 0.1758 | 3.98 | 251.06 | 0.25 |
+| YOLO11n | 2.62 | 0.5884 | 0.3998 | 0.4082 | 0.1756 | 3.92 | 255.38 | 0.26 |
+
+Why these two:
+
+- **YOLO26m** is second in mAP@50:95 (0.1990), only 0.0002 behind YOLO12l, while running about 1.7× faster (50.25 versus 29.63 FPS) with less GPU memory (0.88 versus 1.03 GB). It is within 0.002 of the best mAP@50 and recall among all models.
+- **YOLO26s** is the fastest of the small models (157.16 FPS, 6.36 ms) and second among them in mAP@50:95 (0.1908), behind only YOLO12s (0.1925), which runs about 25% slower.
+- **The pair covers two operating points** within one model family, so the effect of detector size on tracking can be measured without changing architecture.
+- **Not the best on every metric:** YOLOv8m has slightly higher mAP@50 (0.4447) and FPS (53.62), and YOLO12l has the highest mAP@50:95. The choice reflects the accuracy-speed-memory trade-off rather than a single leading score. RT-DETR models were the slowest and most memory-hungry without an accuracy gain.
+
+These CrowdHuman figures come from a detector-only run with its own settings, so the FPS and memory values are not comparable with the end-to-end tracking FPS and GPU figures in the tables below. The image size, split, and hardware for this run were not recorded in the supplied artifact.
+=======
+
 
 ## Results
 
@@ -156,6 +199,7 @@ notebooks/
 results/
   comparison.csv                      # all measured detector/tracker combinations
   detection_metrics.csv               # detector-only validation
+  crowdhuman_detector_comparison.csv  # 15-detector comparison used for model selection
   tracking_metrics.csv                # ByteTrack tracking metrics
   system_metrics.csv                  # ByteTrack timing and memory
   system_per_sequence.csv             # ByteTrack sequence timing
@@ -171,7 +215,12 @@ docs/benchmark/
   tables.md                           # detailed tables and charts
   figures/                            # generated PNG bar charts
 scripts/
+
+  plot_comparison.py                  # regenerate tracking figures
+  plot_crowdhuman.py                  # regenerate detector-selection figures
+=======
   plot_comparison.py                  # regenerate all figures from the CSVs
+
 ```
 
 The notebooks are committed with cell outputs cleared to keep the repository manageable. Original ground-truth copies, prediction text files, videos, and checkpoint weights are omitted. Download MOT20 from its official source before rerunning.
@@ -183,14 +232,22 @@ The notebooks are committed with cell outputs cleared to keep the repository man
 3. Open [the other-trackers notebook](notebooks/ocsort_deepocsort_boosttrack.ipynb) for OC-SORT, Deep-OC-SORT, and BoostTrack. Run its sections in order; the notebook contains installation and TrackEval setup cells.
 4. Compare outputs with [comparison.csv](results/comparison.csv) and the tracker-specific summary and per-sequence CSVs under `results/`. BoT-SORT's summaries are in `results/botsort/`.
 
-To regenerate the report figures from the committed CSVs, install `matplotlib` and `numpy`, then run `python scripts/plot_comparison.py`.
+To regenerate the report figures from the committed CSVs, install `matplotlib` and `numpy`, then run `python scripts/plot_comparison.py` for the tracking figures and `python scripts/plot_crowdhuman.py` for the detector-selection figures.
 
 The notebooks were written for Kaggle and contain environment-specific paths such as `/kaggle/working`. They are experiment records, not a single command-line benchmark runner. The BoostTrack OSNet checkpoint is not included, so reproducing that run requires obtaining the same checkpoint. The BoT-SORT run is recorded through its result CSVs; its notebook and configuration were not part of the supplied artifacts.
 
 ## Scope and limitations
 
+
+These are results on the **MOT20 training split**, not MOT20 test leaderboard scores. The detectors use pretrained weights without MOT20 fine-tuning. Scores reflect the recorded single runs and tracker configurations, and some tracker implementations and ReID settings differ. FPS is taken from each run's own summary, so compare speed with that context. BoT-SORT's environment and configuration were not recorded in the supplied artifacts, so its timing is the least documented of the five trackers. The detector-selection comparison was run on CrowdHuman, not MOT20, and its settings were not recorded. `R@1` and `R@5` fields in some raw summaries are blank and are not reported here.
+
+## Acknowledgments
+
+[MOTChallenge / MOT20](https://motchallenge.net/data/MOT20/), [CrowdHuman](https://www.crowdhuman.org/), [Ultralytics](https://github.com/ultralytics/ultralytics), [TrackEval](https://github.com/JonathonLuiten/TrackEval), and [BoxMOT](https://github.com/mikel-brostrom/boxmot).
+=======
 These are results on the **MOT20 training split**, not MOT20 test leaderboard scores. The detectors use pretrained weights without MOT20 fine-tuning. Scores reflect the recorded single runs and tracker configurations, and some tracker implementations and ReID settings differ. FPS is taken from each run's own summary, so compare speed with that context. BoT-SORT's environment and configuration were not recorded in the supplied artifacts, so its timing is the least documented of the five trackers. `R@1` and `R@5` fields in some raw summaries are blank and are not reported here.
 
 ## Acknowledgments
 
 [MOTChallenge / MOT20](https://motchallenge.net/data/MOT20/), [Ultralytics](https://github.com/ultralytics/ultralytics), [TrackEval](https://github.com/JonathonLuiten/TrackEval), and [BoxMOT](https://github.com/mikel-brostrom/boxmot).
+
