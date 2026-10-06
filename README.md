@@ -8,6 +8,7 @@ Inspired by the clear experiment-and-results layout of [Person-ReID-BenchMark](h
 
 - [Setup](#setup)
 - [Detector selection](#detector-selection)
+- [MOT20 detection benchmark](#mot20-detection-benchmark)
 - [Results](#results)
 - [Performance comparisons](#performance-comparisons)
 - [Detailed tables and graphs](docs/benchmark/tables.md)
@@ -30,7 +31,9 @@ Inspired by the clear experiment-and-results layout of [Person-ReID-BenchMark](h
 Tracker settings and any run-specific differences are recorded in the [configuration files](results/). ByteTrack uses Ultralytics `bytetrack.yaml`; OC-SORT and Deep-OC-SORT use the supplied YAML files. BoostTrack uses an OSNet ReID model and the installed implementation defaults recorded in its configuration. BoT-SORT scores and timing come from its own run summaries; its environment details were not recorded in the supplied artifacts. These runs were performed separately, so timing comparisons should be treated as indicative rather than a controlled simultaneous benchmark.
 
 
-## Detector selection
+## Detection benchmarks
+
+### CrowdHuman detection benchmark
 
 YOLO26s and YOLO26m were chosen after a separate detector comparison on **CrowdHuman**, a dense-crowd pedestrian dataset. Eighteen detectors were evaluated: the YOLOv8, YOLO11, YOLO12, and YOLO26 families in n, s, m, and l sizes where available, plus RT-DETR-l and RT-DETR-x. All 18 runs completed successfully. Full results are in [crowdhuman_detector_comparison.csv](results/crowdhuman_detector_comparison.csv).
 
@@ -72,6 +75,45 @@ Why these two:
 - **RT-DETR remains slower:** RT-DETR-x and RT-DETR-l achieve mAP@50:95 of 0.4227 and 0.4142 respectively, while running at only 21.32 and 24.17 FPS.
 
 These CrowdHuman figures come from a detector-only run with its own settings, so the FPS and memory values are not comparable with the end-to-end tracking FPS and GPU figures in the tables below. The image size, split, and hardware for this run were not recorded in the supplied artifact.
+
+### MOT20 detection benchmark
+
+The detector-selection experiment was followed by a dedicated **MOT20 detection benchmark** using the MOT20 training split. Eighteen pretrained detectors were evaluated for pedestrian detection. The table reports the recorded detection accuracy, GPU inference time, throughput, and peak GPU memory.
+
+**Detector accuracy ranking (mAP@50:95 on MOT20)**
+
+| Detector | Params (M) | Precision ↑ | Recall ↑ | mAP@50 ↑ | mAP@50:95 ↑ | GPU inference (ms) ↓ | GPU FPS ↑ | Peak GPU (GB) ↓ |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| **YOLOv8s** | 11.16 | 0.7610 | 0.6152 | **0.6040** | **0.2422** | 9.31 | **107.39** | 0.07 |
+| YOLO11l | 25.34 | 0.6771 | 0.6497 | 0.5702 | 0.2336 | 30.44 | 32.85 | 0.18 |
+| YOLO12s | 9.26 | 0.6464 | **0.6522** | 0.5686 | 0.2324 | 16.87 | 59.28 | 0.12 |
+| YOLO12l | 26.40 | 0.6215 | 0.6716 | 0.5730 | 0.2317 | 54.57 | 18.33 | 0.22 |
+| YOLOv8l | 43.67 | 0.6432 | 0.6551 | 0.5626 | 0.2292 | 40.52 | 24.68 | 0.19 |
+| YOLOv8m | 25.89 | 0.7079 | 0.6450 | 0.5804 | 0.2289 | 26.21 | 38.16 | 0.12 |
+| YOLO12m | 20.17 | 0.6470 | 0.6419 | 0.5552 | 0.2270 | 35.67 | 28.03 | 0.20 |
+| YOLO26l | 24.81 | 0.6120 | 0.6426 | 0.5485 | 0.2252 | 30.29 | 33.02 | 0.18 |
+| YOLOv8n | 3.15 | 0.7356 | 0.5743 | 0.5752 | 0.2232 | **6.03** | 165.96 | **0.03** |
+| YOLO26m | 20.41 | 0.6261 | 0.6458 | 0.5495 | 0.2223 | 24.08 | 41.53 | 0.16 |
+| YOLO11n | 2.62 | 0.7384 | 0.5543 | 0.5622 | 0.2204 | 8.50 | 117.67 | 0.06 |
+| YOLO12n | 2.59 | 0.7453 | 0.5578 | 0.5590 | 0.2197 | 13.48 | 74.18 | 0.07 |
+| YOLO11m | 20.09 | **0.7522** | 0.5638 | 0.5485 | 0.2172 | 23.08 | 43.33 | 0.16 |
+| YOLO11s | 9.44 | 0.7144 | 0.5973 | 0.5455 | 0.2163 | 10.12 | 98.79 | 0.10 |
+| YOLO26n | 2.41 | 0.7408 | 0.5498 | 0.5628 | 0.2156 | 9.94 | 100.61 | 0.06 |
+| YOLO26s | 9.50 | 0.6292 | 0.6068 | 0.5213 | 0.2108 | 10.49 | 95.33 | 0.10 |
+| RT-DETR-l | 32.15 | 0.6102 | 0.5864 | 0.4791 | 0.2073 | 50.31 | 19.88 | 0.20 |
+| RT-DETR-x | 65.63 | 0.4282 | 0.4687 | 0.3105 | 0.1099 | 72.04 | 13.88 | 0.28 |
+
+### MOT20 detector findings
+
+- **Best detection accuracy:** YOLOv8s achieves the highest mAP@50:95 (**0.2422**) and mAP@50 (**0.6040**).
+- **Best recall:** YOLO12l records the highest recall (**0.6716**).
+- **Best precision:** YOLO11m records the highest precision (**0.7522**).
+- **Best speed:** YOLOv8n records the lowest GPU inference time (**6.03 ms**) and highest GPU throughput (**165.96 FPS**).
+- **YOLO26 performance:** YOLO26l, YOLO26m, YOLO26n, and YOLO26s achieve mAP@50:95 values of **0.2252**, **0.2223**, **0.2156**, and **0.2108**, respectively.
+- **RT-DETR:** RT-DETR-l and RT-DETR-x record mAP@50:95 values of **0.2073** and **0.1099**, with 19.88 and 13.88 FPS respectively.
+
+These are **detector-only MOT20 results**. They are separate from the CrowdHuman detector-selection experiment and from the end-to-end MOT20 tracking results below. The supplied CSV does not specify the full inference configuration, so settings such as image size and confidence threshold should not be inferred from this table alone.
+
 
 ## Results
 
@@ -201,7 +243,8 @@ notebooks/
 results/
   comparison.csv                      # all measured detector/tracker combinations
   detection_metrics.csv               # detector-only validation
-  crowdhuman_detector_comparison.csv  # 15-detector comparison used for model selection
+  crowdhuman_detector_comparison.csv  # 18-detector CrowdHuman comparison used for model selection
+  mot20_benchmark.csv                  # 18-detector MOT20 detection benchmark
   tracking_metrics.csv                # ByteTrack tracking metrics
   system_metrics.csv                  # ByteTrack timing and memory
   system_per_sequence.csv             # ByteTrack sequence timing
@@ -210,6 +253,7 @@ results/
     pedestrian_summary_yolos.csv      # BoT-SORT per-sequence, YOLO26s
     pedestrian_summary_yolom.csv      # BoT-SORT per-sequence, YOLO26m
     mot20_yolo26_comparison.csv       # detector-only GPU profile
+  mot20_benchmark.csv                # 18-detector MOT20 detection benchmark
   ocsort/                             # configuration, summaries, sequence detail
   deepocsort/                         # configuration, summaries, sequence detail
   boosttrack/                         # configuration, summaries, sequence detail
@@ -220,8 +264,6 @@ scripts/
 
   plot_comparison.py                  # regenerate tracking figures
   plot_crowdhuman.py                  # regenerate detector-selection figures
-=======
-  plot_comparison.py                  # regenerate all figures from the CSVs
 
 ```
 
