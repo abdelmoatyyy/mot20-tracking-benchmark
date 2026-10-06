@@ -81,6 +81,7 @@ These CrowdHuman figures come from a detector-only run with its own settings, so
 The detector-selection experiment was followed by a dedicated **MOT20 detection benchmark** using the MOT20 training split. Eighteen pretrained detectors were evaluated for pedestrian detection. The table reports the recorded detection accuracy, GPU inference time, throughput, and peak GPU memory.
 
 **Detector accuracy ranking (mAP@50:95 on MOT20)**
+![CrowdHuman detector ranking](docs/benchmark/figures/MOT20_bench.png)
 
 | Detector | Params (M) | Precision ↑ | Recall ↑ | mAP@50 ↑ | mAP@50:95 ↑ | GPU inference (ms) ↓ | GPU FPS ↑ | Peak GPU (GB) ↓ |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
