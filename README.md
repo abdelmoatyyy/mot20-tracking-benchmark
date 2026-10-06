@@ -31,7 +31,9 @@ Inspired by the clear experiment-and-results layout of [Person-ReID-BenchMark](h
 Tracker settings and any run-specific differences are recorded in the [configuration files](results/). ByteTrack uses Ultralytics `bytetrack.yaml`; OC-SORT and Deep-OC-SORT use the supplied YAML files. BoostTrack uses an OSNet ReID model and the installed implementation defaults recorded in its configuration. BoT-SORT scores and timing come from its own run summaries; its environment details were not recorded in the supplied artifacts. These runs were performed separately, so timing comparisons should be treated as indicative rather than a controlled simultaneous benchmark.
 
 
-## Detector selection
+## Detection benchmarks
+
+### CrowdHuman detection benchmark
 
 YOLO26s and YOLO26m were chosen after a separate detector comparison on **CrowdHuman**, a dense-crowd pedestrian dataset. Eighteen detectors were evaluated: the YOLOv8, YOLO11, YOLO12, and YOLO26 families in n, s, m, and l sizes where available, plus RT-DETR-l and RT-DETR-x. All 18 runs completed successfully. Full results are in [crowdhuman_detector_comparison.csv](results/crowdhuman_detector_comparison.csv).
 
@@ -74,7 +76,7 @@ Why these two:
 
 These CrowdHuman figures come from a detector-only run with its own settings, so the FPS and memory values are not comparable with the end-to-end tracking FPS and GPU figures in the tables below. The image size, split, and hardware for this run were not recorded in the supplied artifact.
 
-## MOT20 detection benchmark
+### MOT20 detection benchmark
 
 The detector-selection experiment was followed by a dedicated **MOT20 detection benchmark** using the MOT20 training split. Eighteen pretrained detectors were evaluated for pedestrian detection. The table reports the recorded detection accuracy, GPU inference time, throughput, and peak GPU memory.
 
