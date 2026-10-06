@@ -8,6 +8,7 @@ Inspired by the clear experiment-and-results layout of [Person-ReID-BenchMark](h
 
 - [Setup](#setup)
 - [Detector selection](#detector-selection)
+- [MOT20 detection benchmark](#mot20-detection-benchmark)
 - [Results](#results)
 - [Performance comparisons](#performance-comparisons)
 - [Detailed tables and graphs](docs/benchmark/tables.md)
@@ -32,7 +33,7 @@ Tracker settings and any run-specific differences are recorded in the [configura
 
 ## Detector selection
 
-YOLO26s and YOLO26m were chosen after a separate detector comparison on **CrowdHuman**, a dense-crowd pedestrian dataset. Fifteen detectors were evaluated: the YOLOv8, YOLO11, YOLO12, and YOLO26 families in n, s, m (and YOLO12l) sizes, plus RT-DETR-l and RT-DETR-x. All 15 runs completed successfully. Full results are in [crowdhuman_detector_comparison.csv](results/crowdhuman_detector_comparison.csv).
+YOLO26s and YOLO26m were chosen after a separate detector comparison on **CrowdHuman**, a dense-crowd pedestrian dataset. Eighteen detectors were evaluated: the YOLOv8, YOLO11, YOLO12, and YOLO26 families in n, s, m, and l sizes where available, plus RT-DETR-l and RT-DETR-x. All 18 runs completed successfully. Full results are in [crowdhuman_detector_comparison.csv](results/crowdhuman_detector_comparison.csv).
 
 **Detector accuracy ranking (mAP@50:95 on CrowdHuman)**
 
@@ -44,31 +45,72 @@ YOLO26s and YOLO26m were chosen after a separate detector comparison on **CrowdH
 
 | Detector | Params (M) | Precision ↑ | Recall ↑ | mAP@50 ↑ | mAP@50:95 ↑ | GPU inference (ms) ↓ | GPU FPS ↑ | Peak GPU (GB) ↓ |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| YOLO12l | 26.45 | 0.6083 | 0.4555 | 0.4445 | 0.1992 | 33.75 | 29.63 | 1.03 |
-| **YOLO26m** | 21.90 | 0.5995 | 0.4567 | 0.4426 | 0.1990 | 19.90 | 50.25 | 0.88 |
-| YOLO12m | 20.20 | 0.6113 | 0.4498 | 0.4421 | 0.1981 | 23.42 | 42.70 | 0.87 |
-| YOLOv8m | 25.90 | 0.6085 | 0.4585 | 0.4447 | 0.1974 | 18.65 | 53.62 | 0.75 |
-| YOLO11m | 20.11 | 0.6017 | 0.4493 | 0.4360 | 0.1962 | 19.95 | 50.13 | 0.87 |
-| YOLO12s | 9.29 | 0.6094 | 0.4326 | 0.4331 | 0.1925 | 8.56 | 116.81 | 0.47 |
-| RT-DETR-x | 67.47 | 0.5852 | 0.4469 | 0.4294 | 0.1911 | 72.70 | 13.76 | 1.88 |
-| **YOLO26s** | 10.01 | 0.6008 | 0.4344 | 0.4296 | 0.1908 | 6.36 | 157.16 | 0.47 |
-| YOLO11s | 9.46 | 0.5966 | 0.4349 | 0.4307 | 0.1895 | 6.58 | 151.99 | 0.47 |
-| RT-DETR-l | 32.97 | 0.5884 | 0.4456 | 0.4246 | 0.1890 | 41.20 | 24.27 | 1.23 |
-| YOLOv8s | 11.17 | 0.6070 | 0.4356 | 0.4289 | 0.1867 | 6.96 | 143.74 | 0.42 |
-| YOLO12n | 2.60 | 0.5963 | 0.4023 | 0.4116 | 0.1795 | 4.60 | 217.22 | 0.26 |
-| YOLOv8n | 3.16 | 0.5979 | 0.4074 | 0.4152 | 0.1787 | 3.98 | 251.45 | 0.24 |
-| YOLO26n | 2.57 | 0.5915 | 0.3982 | 0.4093 | 0.1758 | 3.98 | 251.06 | 0.25 |
-| YOLO11n | 2.62 | 0.5884 | 0.3998 | 0.4082 | 0.1756 | 3.92 | 255.38 | 0.26 |
+| **YOLO26l** | 26.30 | 0.7734 | 0.6308 | 0.7208 | **0.4596** | 16.04 | 62.35 | 0.50 |
+| YOLOv8l | 43.69 | 0.7705 | 0.6284 | 0.7121 | 0.4537 | 17.88 | 55.94 | 0.70 |
+| YOLO11l | 25.37 | **0.7794** | 0.6144 | 0.7118 | 0.4512 | 16.71 | 59.85 | **0.42** |
+| YOLO12l | 26.45 | 0.7849 | 0.6085 | 0.7105 | 0.4507 | 24.69 | 40.50 | 0.54 |
+| **YOLO26m** | 21.90 | 0.7664 | 0.6184 | 0.7068 | **0.4476** | 11.12 | **89.89** | **0.39** |
+| YOLOv8m | 25.90 | 0.7609 | 0.6233 | 0.7057 | 0.4393 | 11.89 | 84.13 | 0.49 |
+| YOLO12m | 20.20 | 0.7786 | 0.5989 | 0.6981 | 0.4391 | 14.76 | 67.76 | 0.39 |
+| YOLO11m | 20.11 | 0.7696 | 0.6035 | 0.6951 | 0.4374 | 11.20 | 89.25 | 0.79 |
+| RT-DETR-x | 67.47 | 0.7214 | 0.6044 | 0.6770 | 0.4227 | 46.90 | 21.32 | 0.64 |
+| RT-DETR-l | 32.97 | 0.7236 | 0.6025 | 0.6684 | 0.4142 | 41.37 | 24.17 | 0.65 |
+| **YOLO26s** | 10.01 | 0.7543 | 0.5740 | 0.6644 | **0.4075** | 10.37 | 96.47 | 0.59 |
+| YOLO12s | 9.29 | 0.7619 | 0.5642 | 0.6623 | 0.4044 | 14.05 | 71.16 | 0.47 |
+| YOLOv8s | 11.17 | 0.7545 | 0.5857 | 0.6688 | 0.4017 | **6.64** | **150.52** | **0.33** |
+| YOLO11s | 9.46 | 0.7451 | 0.5762 | 0.6614 | 0.3994 | 9.00 | 111.08 | 0.66 |
+| YOLOv8n | 3.16 | 0.7404 | 0.5295 | 0.6182 | 0.3559 | 6.61 | 151.38 | 0.27 |
+| YOLO12n | 2.60 | 0.7429 | 0.5154 | 0.6082 | 0.3528 | 14.07 | 71.06 | 0.41 |
+| YOLO11n | 2.62 | 0.7330 | 0.5186 | 0.6061 | 0.3474 | 8.68 | 115.23 | 0.60 |
+| YOLO26n | 2.57 | 0.7389 | 0.5085 | 0.6021 | 0.3456 | 10.21 | 97.98 | 0.52 |
 
 Why these two:
 
-- **YOLO26m** is second in mAP@50:95 (0.1990), only 0.0002 behind YOLO12l, while running about 1.7× faster (50.25 versus 29.63 FPS) with less GPU memory (0.88 versus 1.03 GB). It is within 0.002 of the best mAP@50 and recall among all models.
-- **YOLO26s** is the fastest of the small models (157.16 FPS, 6.36 ms) and second among them in mAP@50:95 (0.1908), behind only YOLO12s (0.1925), which runs about 25% slower.
+- **YOLO26m** provides the strongest accuracy-speed balance among the selected operating points: mAP@50:95 of **0.4476**, 89.89 FPS, 11.12 ms GPU inference, and 0.39 GB peak GPU memory. It is only 0.0120 below the best overall mAP@50:95 (YOLO26l at 0.4596), while being substantially faster (89.89 versus 62.35 FPS).
+- **YOLO26s** provides a smaller operating point with mAP@50:95 of **0.4075**, 96.47 FPS, and 10.37 ms GPU inference. It has higher mAP@50:95 than the other small YOLO26/YOLO11/YOLOv8/YOLO12 models in this comparison, although YOLOv8s is substantially faster at 150.52 FPS.
 - **The pair covers two operating points** within one model family, so the effect of detector size on tracking can be measured without changing architecture.
-- **Not the best on every metric:** YOLOv8m has slightly higher mAP@50 (0.4447) and FPS (53.62), and YOLO12l has the highest mAP@50:95. The choice reflects the accuracy-speed-memory trade-off rather than a single leading score. RT-DETR models were the slowest and most memory-hungry without an accuracy gain.
+- **Not the best on every metric:** YOLO26l has the highest mAP@50:95 (0.4596), while YOLOv8s has the highest FPS among the s-size models (150.52 FPS) and YOLOv8n has the highest FPS overall (151.38 FPS). The selected pair therefore represents an accuracy-speed trade-off rather than the single best score on every metric.
+- **RT-DETR remains slower:** RT-DETR-x and RT-DETR-l achieve mAP@50:95 of 0.4227 and 0.4142 respectively, while running at only 21.32 and 24.17 FPS.
 
 These CrowdHuman figures come from a detector-only run with its own settings, so the FPS and memory values are not comparable with the end-to-end tracking FPS and GPU figures in the tables below. The image size, split, and hardware for this run were not recorded in the supplied artifact.
-=======
+
+## MOT20 detection benchmark
+
+The detector-selection experiment was followed by a dedicated **MOT20 detection benchmark** using the MOT20 training split. Eighteen pretrained detectors were evaluated for pedestrian detection. The table reports the recorded detection accuracy, GPU inference time, throughput, and peak GPU memory.
+
+**Detector accuracy ranking (mAP@50:95 on MOT20)**
+
+| Detector | Params (M) | Precision ↑ | Recall ↑ | mAP@50 ↑ | mAP@50:95 ↑ | GPU inference (ms) ↓ | GPU FPS ↑ | Peak GPU (GB) ↓ |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| **YOLOv8s** | 11.16 | 0.7610 | 0.6152 | **0.6040** | **0.2422** | 9.31 | **107.39** | 0.07 |
+| YOLO11l | 25.34 | 0.6771 | 0.6497 | 0.5702 | 0.2336 | 30.44 | 32.85 | 0.18 |
+| YOLO12s | 9.26 | 0.6464 | **0.6522** | 0.5686 | 0.2324 | 16.87 | 59.28 | 0.12 |
+| YOLO12l | 26.40 | 0.6215 | 0.6716 | 0.5730 | 0.2317 | 54.57 | 18.33 | 0.22 |
+| YOLOv8l | 43.67 | 0.6432 | 0.6551 | 0.5626 | 0.2292 | 40.52 | 24.68 | 0.19 |
+| YOLOv8m | 25.89 | 0.7079 | 0.6450 | 0.5804 | 0.2289 | 26.21 | 38.16 | 0.12 |
+| YOLO12m | 20.17 | 0.6470 | 0.6419 | 0.5552 | 0.2270 | 35.67 | 28.03 | 0.20 |
+| YOLO26l | 24.81 | 0.6120 | 0.6426 | 0.5485 | 0.2252 | 30.29 | 33.02 | 0.18 |
+| YOLOv8n | 3.15 | 0.7356 | 0.5743 | 0.5752 | 0.2232 | **6.03** | 165.96 | **0.03** |
+| YOLO26m | 20.41 | 0.6261 | 0.6458 | 0.5495 | 0.2223 | 24.08 | 41.53 | 0.16 |
+| YOLO11n | 2.62 | 0.7384 | 0.5543 | 0.5622 | 0.2204 | 8.50 | 117.67 | 0.06 |
+| YOLO12n | 2.59 | 0.7453 | 0.5578 | 0.5590 | 0.2197 | 13.48 | 74.18 | 0.07 |
+| YOLO11m | 20.09 | **0.7522** | 0.5638 | 0.5485 | 0.2172 | 23.08 | 43.33 | 0.16 |
+| YOLO11s | 9.44 | 0.7144 | 0.5973 | 0.5455 | 0.2163 | 10.12 | 98.79 | 0.10 |
+| YOLO26n | 2.41 | 0.7408 | 0.5498 | 0.5628 | 0.2156 | 9.94 | 100.61 | 0.06 |
+| YOLO26s | 9.50 | 0.6292 | 0.6068 | 0.5213 | 0.2108 | 10.49 | 95.33 | 0.10 |
+| RT-DETR-l | 32.15 | 0.6102 | 0.5864 | 0.4791 | 0.2073 | 50.31 | 19.88 | 0.20 |
+| RT-DETR-x | 65.63 | 0.4282 | 0.4687 | 0.3105 | 0.1099 | 72.04 | 13.88 | 0.28 |
+
+### MOT20 detector findings
+
+- **Best detection accuracy:** YOLOv8s achieves the highest mAP@50:95 (**0.2422**) and mAP@50 (**0.6040**).
+- **Best recall:** YOLO12l records the highest recall (**0.6716**).
+- **Best precision:** YOLO11m records the highest precision (**0.7522**).
+- **Best speed:** YOLOv8n records the lowest GPU inference time (**6.03 ms**) and highest GPU throughput (**165.96 FPS**).
+- **YOLO26 performance:** YOLO26l, YOLO26m, YOLO26n, and YOLO26s achieve mAP@50:95 values of **0.2252**, **0.2223**, **0.2156**, and **0.2108**, respectively.
+- **RT-DETR:** RT-DETR-l and RT-DETR-x record mAP@50:95 values of **0.2073** and **0.1099**, with 19.88 and 13.88 FPS respectively.
+
+These are **detector-only MOT20 results**. They are separate from the CrowdHuman detector-selection experiment and from the end-to-end MOT20 tracking results below. The supplied CSV does not specify the full inference configuration, so settings such as image size and confidence threshold should not be inferred from this table alone.
 
 
 ## Results
@@ -199,7 +241,8 @@ notebooks/
 results/
   comparison.csv                      # all measured detector/tracker combinations
   detection_metrics.csv               # detector-only validation
-  crowdhuman_detector_comparison.csv  # 15-detector comparison used for model selection
+  crowdhuman_detector_comparison.csv  # 18-detector CrowdHuman comparison used for model selection
+  mot20_benchmark.csv                  # 18-detector MOT20 detection benchmark
   tracking_metrics.csv                # ByteTrack tracking metrics
   system_metrics.csv                  # ByteTrack timing and memory
   system_per_sequence.csv             # ByteTrack sequence timing
@@ -208,6 +251,7 @@ results/
     pedestrian_summary_yolos.csv      # BoT-SORT per-sequence, YOLO26s
     pedestrian_summary_yolom.csv      # BoT-SORT per-sequence, YOLO26m
     mot20_yolo26_comparison.csv       # detector-only GPU profile
+  mot20_benchmark.csv                # 18-detector MOT20 detection benchmark
   ocsort/                             # configuration, summaries, sequence detail
   deepocsort/                         # configuration, summaries, sequence detail
   boosttrack/                         # configuration, summaries, sequence detail
@@ -218,8 +262,6 @@ scripts/
 
   plot_comparison.py                  # regenerate tracking figures
   plot_crowdhuman.py                  # regenerate detector-selection figures
-=======
-  plot_comparison.py                  # regenerate all figures from the CSVs
 
 ```
 
