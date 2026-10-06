@@ -32,7 +32,7 @@ Tracker settings and any run-specific differences are recorded in the [configura
 
 ## Detector selection
 
-YOLO26s and YOLO26m were chosen after a separate detector comparison on **CrowdHuman**, a dense-crowd pedestrian dataset. Fifteen detectors were evaluated: the YOLOv8, YOLO11, YOLO12, and YOLO26 families in n, s, m (and YOLO12l) sizes, plus RT-DETR-l and RT-DETR-x. All 15 runs completed successfully. Full results are in [crowdhuman_detector_comparison.csv](results/crowdhuman_detector_comparison.csv).
+YOLO26s and YOLO26m were chosen after a separate detector comparison on **CrowdHuman**, a dense-crowd pedestrian dataset. Eighteen detectors were evaluated: the YOLOv8, YOLO11, YOLO12, and YOLO26 families in n, s, m, and l sizes where available, plus RT-DETR-l and RT-DETR-x. All 18 runs completed successfully. Full results are in [crowdhuman_detector_comparison.csv](results/crowdhuman_detector_comparison.csv).
 
 **Detector accuracy ranking (mAP@50:95 on CrowdHuman)**
 
@@ -44,32 +44,34 @@ YOLO26s and YOLO26m were chosen after a separate detector comparison on **CrowdH
 
 | Detector | Params (M) | Precision ↑ | Recall ↑ | mAP@50 ↑ | mAP@50:95 ↑ | GPU inference (ms) ↓ | GPU FPS ↑ | Peak GPU (GB) ↓ |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| YOLO12l | 26.45 | 0.6083 | 0.4555 | 0.4445 | 0.1992 | 33.75 | 29.63 | 1.03 |
-| **YOLO26m** | 21.90 | 0.5995 | 0.4567 | 0.4426 | 0.1990 | 19.90 | 50.25 | 0.88 |
-| YOLO12m | 20.20 | 0.6113 | 0.4498 | 0.4421 | 0.1981 | 23.42 | 42.70 | 0.87 |
-| YOLOv8m | 25.90 | 0.6085 | 0.4585 | 0.4447 | 0.1974 | 18.65 | 53.62 | 0.75 |
-| YOLO11m | 20.11 | 0.6017 | 0.4493 | 0.4360 | 0.1962 | 19.95 | 50.13 | 0.87 |
-| YOLO12s | 9.29 | 0.6094 | 0.4326 | 0.4331 | 0.1925 | 8.56 | 116.81 | 0.47 |
-| RT-DETR-x | 67.47 | 0.5852 | 0.4469 | 0.4294 | 0.1911 | 72.70 | 13.76 | 1.88 |
-| **YOLO26s** | 10.01 | 0.6008 | 0.4344 | 0.4296 | 0.1908 | 6.36 | 157.16 | 0.47 |
-| YOLO11s | 9.46 | 0.5966 | 0.4349 | 0.4307 | 0.1895 | 6.58 | 151.99 | 0.47 |
-| RT-DETR-l | 32.97 | 0.5884 | 0.4456 | 0.4246 | 0.1890 | 41.20 | 24.27 | 1.23 |
-| YOLOv8s | 11.17 | 0.6070 | 0.4356 | 0.4289 | 0.1867 | 6.96 | 143.74 | 0.42 |
-| YOLO12n | 2.60 | 0.5963 | 0.4023 | 0.4116 | 0.1795 | 4.60 | 217.22 | 0.26 |
-| YOLOv8n | 3.16 | 0.5979 | 0.4074 | 0.4152 | 0.1787 | 3.98 | 251.45 | 0.24 |
-| YOLO26n | 2.57 | 0.5915 | 0.3982 | 0.4093 | 0.1758 | 3.98 | 251.06 | 0.25 |
-| YOLO11n | 2.62 | 0.5884 | 0.3998 | 0.4082 | 0.1756 | 3.92 | 255.38 | 0.26 |
+| **YOLO26l** | 26.30 | 0.7734 | 0.6308 | 0.7208 | **0.4596** | 16.04 | 62.35 | 0.50 |
+| YOLOv8l | 43.69 | 0.7705 | 0.6284 | 0.7121 | 0.4537 | 17.88 | 55.94 | 0.70 |
+| YOLO11l | 25.37 | **0.7794** | 0.6144 | 0.7118 | 0.4512 | 16.71 | 59.85 | **0.42** |
+| YOLO12l | 26.45 | 0.7849 | 0.6085 | 0.7105 | 0.4507 | 24.69 | 40.50 | 0.54 |
+| **YOLO26m** | 21.90 | 0.7664 | 0.6184 | 0.7068 | **0.4476** | 11.12 | **89.89** | **0.39** |
+| YOLOv8m | 25.90 | 0.7609 | 0.6233 | 0.7057 | 0.4393 | 11.89 | 84.13 | 0.49 |
+| YOLO12m | 20.20 | 0.7786 | 0.5989 | 0.6981 | 0.4391 | 14.76 | 67.76 | 0.39 |
+| YOLO11m | 20.11 | 0.7696 | 0.6035 | 0.6951 | 0.4374 | 11.20 | 89.25 | 0.79 |
+| RT-DETR-x | 67.47 | 0.7214 | 0.6044 | 0.6770 | 0.4227 | 46.90 | 21.32 | 0.64 |
+| RT-DETR-l | 32.97 | 0.7236 | 0.6025 | 0.6684 | 0.4142 | 41.37 | 24.17 | 0.65 |
+| **YOLO26s** | 10.01 | 0.7543 | 0.5740 | 0.6644 | **0.4075** | 10.37 | 96.47 | 0.59 |
+| YOLO12s | 9.29 | 0.7619 | 0.5642 | 0.6623 | 0.4044 | 14.05 | 71.16 | 0.47 |
+| YOLOv8s | 11.17 | 0.7545 | 0.5857 | 0.6688 | 0.4017 | **6.64** | **150.52** | **0.33** |
+| YOLO11s | 9.46 | 0.7451 | 0.5762 | 0.6614 | 0.3994 | 9.00 | 111.08 | 0.66 |
+| YOLOv8n | 3.16 | 0.7404 | 0.5295 | 0.6182 | 0.3559 | 6.61 | 151.38 | 0.27 |
+| YOLO12n | 2.60 | 0.7429 | 0.5154 | 0.6082 | 0.3528 | 14.07 | 71.06 | 0.41 |
+| YOLO11n | 2.62 | 0.7330 | 0.5186 | 0.6061 | 0.3474 | 8.68 | 115.23 | 0.60 |
+| YOLO26n | 2.57 | 0.7389 | 0.5085 | 0.6021 | 0.3456 | 10.21 | 97.98 | 0.52 |
 
 Why these two:
 
-- **YOLO26m** is second in mAP@50:95 (0.1990), only 0.0002 behind YOLO12l, while running about 1.7× faster (50.25 versus 29.63 FPS) with less GPU memory (0.88 versus 1.03 GB). It is within 0.002 of the best mAP@50 and recall among all models.
-- **YOLO26s** is the fastest of the small models (157.16 FPS, 6.36 ms) and second among them in mAP@50:95 (0.1908), behind only YOLO12s (0.1925), which runs about 25% slower.
+- **YOLO26m** provides the strongest accuracy-speed balance among the selected operating points: mAP@50:95 of **0.4476**, 89.89 FPS, 11.12 ms GPU inference, and 0.39 GB peak GPU memory. It is only 0.0120 below the best overall mAP@50:95 (YOLO26l at 0.4596), while being substantially faster (89.89 versus 62.35 FPS).
+- **YOLO26s** provides a smaller operating point with mAP@50:95 of **0.4075**, 96.47 FPS, and 10.37 ms GPU inference. It has higher mAP@50:95 than the other small YOLO26/YOLO11/YOLOv8/YOLO12 models in this comparison, although YOLOv8s is substantially faster at 150.52 FPS.
 - **The pair covers two operating points** within one model family, so the effect of detector size on tracking can be measured without changing architecture.
-- **Not the best on every metric:** YOLOv8m has slightly higher mAP@50 (0.4447) and FPS (53.62), and YOLO12l has the highest mAP@50:95. The choice reflects the accuracy-speed-memory trade-off rather than a single leading score. RT-DETR models were the slowest and most memory-hungry without an accuracy gain.
+- **Not the best on every metric:** YOLO26l has the highest mAP@50:95 (0.4596), while YOLOv8s has the highest FPS among the s-size models (150.52 FPS) and YOLOv8n has the highest FPS overall (151.38 FPS). The selected pair therefore represents an accuracy-speed trade-off rather than the single best score on every metric.
+- **RT-DETR remains slower:** RT-DETR-x and RT-DETR-l achieve mAP@50:95 of 0.4227 and 0.4142 respectively, while running at only 21.32 and 24.17 FPS.
 
 These CrowdHuman figures come from a detector-only run with its own settings, so the FPS and memory values are not comparable with the end-to-end tracking FPS and GPU figures in the tables below. The image size, split, and hardware for this run were not recorded in the supplied artifact.
-=======
-
 
 ## Results
 
