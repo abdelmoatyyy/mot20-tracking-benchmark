@@ -39,7 +39,7 @@ YOLO26s and YOLO26m were chosen after a separate detector comparison on **CrowdH
 
 **Detector accuracy ranking (mAP@50:95 on CrowdHuman)**
 
-![CrowdHuman detector ranking](docs/benchmark/figures/crowdhuman_map.png)
+![CrowdHuman detector ranking](docs/benchmark/figures/crowd_bencch.png)
 
 **Detector accuracy versus speed (mAP@50:95 against GPU FPS)**
 
